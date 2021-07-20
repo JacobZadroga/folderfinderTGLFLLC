@@ -9,29 +9,31 @@ namespace ClientFolderFinder
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("v1.20");
             bool valid = false;
             String filetype = "";
             String typepath = "";
-            while(!valid) {
+            String userpath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            while (!valid) {
                 Console.Write("File Type: ");
                 filetype = Console.ReadLine();
                 if (filetype.ToLower().Equals("p"))
                 {
                     valid = true;
                     Console.WriteLine("Purchase File Type Selected.");
-                    typepath = "C:\\Users\\Monika Gradzki\\The Gradzki Law Firm LLC\\Real Estate - Documents\\1 PURCHASES";
+                    typepath = userpath + "\\The Gradzki Law Firm LLC\\Real Estate - Documents\\1 PURCHASES";
                 }
                 else if (filetype.ToLower().Equals("r"))
                 {
                     valid = true;
                     Console.WriteLine("Refinance File Type Selected.");
-                    typepath = "C:\\Users\\Monika Gradzki\\The Gradzki Law Firm LLC\\Real Estate - Documents\\2 REFINANCE";
+                    typepath = userpath + "\\The Gradzki Law Firm LLC\\Real Estate - Documents\\2 REFINANCE";
                 }
                 else if (filetype.ToLower().Equals("s"))
                 {
                     valid = true;
                     Console.WriteLine("Sale File Type Selected.");
-                    typepath = "C:\\Users\\Monika Gradzki\\The Gradzki Law Firm LLC\\Real Estate - Documents\\3 SALE";
+                    typepath = userpath + "\\The Gradzki Law Firm LLC\\Real Estate - Documents\\3 SALE";
                 }
                 else
                 {
@@ -44,7 +46,7 @@ namespace ClientFolderFinder
             Console.Write("Name: ");
             userinfo[0] = Console.ReadLine();
 
-            Console.Write("Street: ");
+            Console.Write("Street (Include Street Type/Abbreviation): ");
             userinfo[1] = Console.ReadLine();
             string strtype = "";
             if(! userinfo[1].Equals(""))
@@ -126,10 +128,23 @@ namespace ClientFolderFinder
                 }
                 while (true)
                 {
+                    Console.Write("Number To Open / 'N' for new folder: ");
+                    string num = Console.ReadLine();
+                    if(num.ToLower().Equals("n"))
+                    {
+                        String flname = userinfo[0] + " (" + userinfo[1] + " " + strtype + unitnumber + ", " + userinfo[2] + ")";
+                        Console.WriteLine(flname);
+                        Directory.CreateDirectory(typepath + "\\" + flname);
+                        Process.Start(new ProcessStartInfo()
+                        {
+                            Arguments = "\"" + typepath + "\\" + flname + "\"",
+                            FileName = "explorer.exe"
+                        });
+                        break;
+                    }
                     try
                     {
-                        Console.Write("Number To Open: ");
-                        int x = Int32.Parse(Console.ReadLine());
+                        int x = Int32.Parse(num);
                         if (x > found.Count)
                         {
                             Console.WriteLine("Invalid Number");
